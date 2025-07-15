@@ -1,4 +1,4 @@
-**Documentación Completa: Liars Table (P2P)**
+**Liars Table (P2P)**
 =============================================
 
 **1\. Visión General**
