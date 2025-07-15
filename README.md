@@ -4,7 +4,7 @@
 **1\. Visión General**
 ----------------------
 
-**Liars Table** es un juego de dados multijugador basado en el clásico "Liar's Dice" (Perudo), implementado con una arquitectura peer-to-peer (P2P). Los jugadores se conectan directamente entre sí para jugar partidas en tiempo real con autenticación, chat y sincronización de estado.
+**Liars Table** es un juego de dados multijugador basado en el clásico "Liar's Dice", implementado con una arquitectura peer-to-peer (P2P). Los jugadores se conectan directamente entre sí para jugar partidas en tiempo real con autenticación, chat y sincronización de estado.
 
 **2\. Arquitectura del Sistema**
 --------------------------------
@@ -51,6 +51,7 @@ liars-table/
 ├── database/                # Scripts SQL
 │   └── schema.sql           # Esquema de base de datos
 └── .gitignore               # Archivos ignorados
+└── README.MD                # Documentacion del proyecto
 ```
 
 **4\. Base de Datos**
@@ -209,13 +210,13 @@ stateDiagram-v2
 
 1.  Instalar XAMPP
     
-2.  Clonar repositorio en **C:\\\\xampp\\\\htdocs\\\\liars-table**
+2.  Clonar repositorio en **C:\\\\xampp\\\\htdocs\\\\rocketraccoon**
     
 3.  Iniciar Apache y MySQL en XAMPP
     
 4.  Importar **database/schema.sql** en phpMyAdmin
     
-5.  Acceder a **http://localhost/liars-table/client/index.html**
+5.  Acceder a **http://localhost/rocketraccoon/client/index.html**
     
 
 **9\. Pruebas**
@@ -252,6 +253,3 @@ stateDiagram-v2
     *   Crear base de datos e importar **schema.sql**
         
 3.  **Configurar URLs:**
-```
-// En client/js/auth.js
-const API_URL = "https://tudominio.000webhostapp.com/server/";
