@@ -1,0 +1,5 @@
+# .gitignore
+/server/.env
+.htaccess
+__pycache__/
+*.log
