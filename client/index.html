@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liars Table - Login</title>
+    <link rel="stylesheet" href="css/auth.css">
+</head>
+<body>
+    <div class="auth-container">
+        <h1>Liars Table</h1>
+        
+        <!-- Formulario de Login -->
+        <form id="login-form" class="auth-form">
+            <h2>Iniciar Sesión</h2>
+            <input type="text" id="login-username" placeholder="Usuario" required>
+            <input type="password" id="login-password" placeholder="Contraseña" required>
+            <button type="submit">Ingresar</button>
+        </form>
+
+        <!-- Formulario de Registro -->
+        <form id="register-form" class="auth-form">
+            <h2>Registrarse</h2>
+            <input type="text" id="register-username" placeholder="Usuario" required>
+            <input type="password" id="register-password" placeholder="Contraseña" required>
+            <input type="password" id="register-confirm" placeholder="Confirmar Contraseña" required>
+            <button type="submit">Crear Cuenta</button>
+        </form>
+
+        <div id="auth-message" class="message"></div>
+    </div>
+
+    <script src="js/auth.js"></script>
+</body>
+</html>
