@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liars Table - Lobby</title>
+    <link rel="stylesheet" href="css/lobby.css">
+</head>
+<body>
+    <div class="lobby-container">
+        <header>
+            <h1>Liars Table</h1>
+            <div class="user-info">
+                <span id="username-display">Usuario</span>
+                <button id="logout-btn">Salir</button>
+            </div>
+        </header>
+
+        <main>
+            <div class="lobby-actions">
+                <button id="create-game-btn">Crear Nueva Partida</button>
+                <div class="join-game">
+                    <input type="text" id="game-code-input" placeholder="Código de partida" maxlength="6">
+                    <button id="join-game-btn">Unirse</button>
+                </div>
+            </div>
+
+            <div class="game-list">
+                <h2>Partidas Disponibles</h2>
+                <div id="games-container">
+                </div>
+            </div>
+        </main>
+
+        <div id="lobby-message" class="message"></div>
+    </div>
+
+    <script src="js/lobby.js"></script>
+</body>
+</html>
