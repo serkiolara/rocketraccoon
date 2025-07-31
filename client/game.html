@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liars Table - Partida</title>
+    <link rel="stylesheet" href="css/game.css">
+</head>
+<body>
+    <div class="game-container">
+        <!-- Encabezado -->
+        <header>
+            <h1>Partida: <span id="game-code">ABC123</span></h1>
+            <div class="player-info">
+                <span id="player-name">Usuario</span>
+                <span id="dice-count">🎲: 5</span>
+            </div>
+        </header>
+
+        <!-- Área Principal -->
+        <main>
+            <!-- Panel de Chat -->
+            <div class="chat-panel">
+                <div id="chat-messages">
+                    <!-- Mensajes aparecerán aquí -->
+                </div>
+                <div class="chat-input">
+                    <input type="text" id="chat-input" placeholder="Escribe un mensaje...">
+                    <button id="send-chat-btn">Enviar</button>
+                </div>
+            </div>
+
+            <!-- Área de Juego -->
+            <div class="game-area">
+                <div class="game-state">
+                    <div id="current-turn">Turno de: <span id="current-player">Jugador1</span></div>
+                    <div id="current-bet">Apuesta actual: <span id="bet-value">Ninguna</span></div>
+                </div>
+
+                <div class="dice-container" id="player-dice">
+                    <!-- Dados del jugador -->
+                </div>
+
+                <div class="game-controls">
+                    <div class="bet-controls">
+                        <select id="dice-value">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                        </select>
+                        <select id="dice-quantity">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
+                        </select>
+                        <button id="place-bet-btn">Apostar</button>
+                    </div>
+                    <button id="call-liar-btn">¡Mentiroso!</button>
+                </div>
+            </div>
+        </main>
+
+        <!-- Panel de Jugadores -->
+        <div class="players-panel">
+            <h2>Jugadores</h2>
+            <ul id="players-list">
+                <!-- Jugadores aparecerán aquí -->
+            </ul>
+        </div>
+    </div>
+
+    <!-- Importar PeerJS desde CDN -->
+    <script src="https://unpkg.com/peerjs@1.4.7/dist/peerjs.min.js"></script>
+    <script src="js/webrtc.js"></script>
+    <script src="js/game.js"></script>
+</body>
+</html>

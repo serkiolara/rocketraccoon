@@ -1,35 +1,52 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Liars Table - Login</title>
-    <link rel="stylesheet" href="css/auth.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Liars Table - Login</title>
+  <link rel="stylesheet" href="css/auth.css"/>
 </head>
 <body>
-    <div class="auth-container">
-        <h1>Liars Table</h1>
-        
-        <!-- Formulario de Login -->
-        <form id="login-form" class="auth-form">
-            <h2>Iniciar Sesión</h2>
-            <input type="text" id="login-username" placeholder="Usuario" required>
-            <input type="password" id="login-password" placeholder="Contraseña" required>
-            <button type="submit">Ingresar</button>
-        </form>
+  <div class="auth-container">
+    <h1 class="logo">Liars Table</h1>
 
-        <!-- Formulario de Registro -->
-        <form id="register-form" class="auth-form">
-            <h2>Registrarse</h2>
-            <input type="text" id="register-username" placeholder="Usuario" required>
-            <input type="password" id="register-password" placeholder="Contraseña" required>
-            <input type="password" id="register-confirm" placeholder="Confirmar Contraseña" required>
-            <button type="submit">Crear Cuenta</button>
-        </form>
+    <div class="forms-wrapper">
+      <!-- Login -->
+      <form id="login-form" class="auth-form">
+        <h2>Iniciar Sesión</h2>
+        <div class="input-group">
+          <label for="login-username">Usuario</label>
+          <input type="text" id="login-username" placeholder="Tu usuario" required />
+        </div>
+        <div class="input-group">
+          <label for="login-password">Contraseña</label>
+          <input type="password" id="login-password" placeholder="Tu contraseña" required />
+        </div>
+        <button type="submit" class="btn">Ingresar</button>
+      </form>
 
-        <div id="auth-message" class="message"></div>
+      <!-- Registro -->
+      <form id="register-form" class="auth-form">
+        <h2>Registrarse</h2>
+        <div class="input-group">
+          <label for="register-username">Usuario</label>
+          <input type="text" id="register-username" placeholder="Elige un usuario" required />
+        </div>
+        <div class="input-group">
+          <label for="register-password">Contraseña</label>
+          <input type="password" id="register-password" placeholder="Elige una contraseña" required />
+        </div>
+        <div class="input-group">
+          <label for="register-confirm">Confirmar</label>
+          <input type="password" id="register-confirm" placeholder="Repite tu contraseña" required />
+        </div>
+        <button type="submit" class="btn">Crear Cuenta</button>
+      </form>
     </div>
 
-    <script src="js/auth.js"></script>
+    <div id="auth-message" class="message"></div>
+  </div>
+
+  <script src="js/auth.js"></script>
 </body>
 </html>
