@@ -1,0 +1,689 @@
+/* ====================================
+   🔍 BUSCAMINAS COLABORATIVO - ESTILOS
+   ==================================== */
+
+/* Variables CSS */
+:root {
+    --primary-color: #ff6b6b;
+    --secondary-color: #ffa726;
+    --success-color: #4ecdc4;
+    --danger-color: #ef4444;
+    --warning-color: #ffeb3b;
+    --dark-bg: #2c3e50;
+    --light-bg: #f8fafc;
+    --card-bg: #ffffff;
+    --text-primary: #0f172a;
+    --text-secondary: #64748b;
+    --border-color: #e2e8f0;
+    --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    
+    /* Colores del buscaminas */
+    --cell-bg: #e5e7eb;
+    --cell-revealed: #f9fafb;
+    --cell-hover: #d1d5db;
+    --mine-color: #dc2626;
+    --flag-color: #ea580c;
+    
+    /* Números del buscaminas */
+    --num-1: #ff6b6b;
+    --num-2: #4ecdc4;
+    --num-3: #ffa726;
+    --num-4: #ab47bc;
+    --num-5: #ef4444;
+    --num-6: #26a69a;
+    --num-7: #000000;
+    --num-8: #374151;
+}
+
+/* Reset y base */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: linear-gradient(135deg, #ff9a56 0%, #ff6b6b 25%, #4ecdc4 50%, #45b7d1 75%, #f093fb 100%);
+    min-height: 100vh;
+    color: var(--text-primary);
+}
+
+/* ====================================
+   LAYOUT PRINCIPAL
+   ==================================== */
+
+.game-container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.game-header {
+    background: var(--card-bg);
+    border-bottom: 1px solid var(--border-color);
+    box-shadow: var(--shadow);
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.game-info h1 {
+    color: var(--primary-color);
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.game-details {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.player-info, .room-code {
+    background: var(--light-bg);
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    font-weight: 500;
+    border: 1px solid var(--border-color);
+}
+
+.connection-status {
+    background: var(--light-bg);
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    font-weight: 500;
+    border: 1px solid var(--border-color);
+    transition: all 0.3s ease;
+}
+
+.connection-status.connected {
+    background: #10b981;
+    color: white;
+    border-color: #10b981;
+}
+
+.connection-status.disconnected {
+    background: #ef4444;
+    color: white;
+    border-color: #ef4444;
+}
+
+.connection-status.error {
+    background: #f59e0b;
+    color: white;
+    border-color: #f59e0b;
+}
+
+.game-stats {
+    display: flex;
+    gap: 1rem;
+}
+
+.game-stats span {
+    background: var(--dark-bg);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    font-family: 'Courier New', monospace;
+}
+
+.game-controls-header {
+    display: flex;
+    gap: 0.75rem;
+}
+
+/* ====================================
+   LAYOUT DEL JUEGO
+   ==================================== */
+
+.game-layout {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 300px 1fr 300px;
+    gap: 1rem;
+    padding: 1rem;
+    min-height: 0;
+}
+
+.sidebar-left, .sidebar-right {
+    background: var(--card-bg);
+    border-radius: 0.75rem;
+    box-shadow: var(--shadow);
+    padding: 1.5rem;
+    height: fit-content;
+    max-height: calc(100vh - 140px);
+    overflow-y: auto;
+}
+
+.game-main {
+    background: var(--card-bg);
+    border-radius: 0.75rem;
+    box-shadow: var(--shadow);
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow: hidden;
+}
+
+/* ====================================
+   TABLERO DEL BUSCAMINAS
+   ==================================== */
+
+.board-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+    width: 100%;
+}
+
+.minesweeper-board {
+    display: grid;
+    grid-template-columns: repeat(16, 1fr);
+    gap: 1px;
+    background: var(--border-color);
+    border: 2px solid var(--border-color);
+    border-radius: 0.5rem;
+    padding: 1px;
+    max-width: 640px;
+    aspect-ratio: 1;
+}
+
+.cell {
+    background: var(--cell-bg);
+    border: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    user-select: none;
+    min-height: 35px;
+    min-width: 35px;
+}
+
+.cell:hover:not(.revealed):not(.flagged) {
+    background: var(--cell-hover);
+    transform: scale(1.05);
+}
+
+.cell.revealed {
+    background: var(--cell-revealed);
+    border-color: var(--border-color);
+    cursor: default;
+    box-shadow: inset 1px 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.cell.flagged {
+    background: var(--warning-color);
+    color: white;
+    cursor: pointer;
+}
+
+.cell.mine {
+    background: var(--danger-color);
+    color: white;
+    animation: explode 0.3s ease-out;
+}
+
+.cell.mine-adjacent-0 { background: var(--cell-revealed); }
+.cell.mine-adjacent-1 { color: var(--num-1); }
+.cell.mine-adjacent-2 { color: var(--num-2); }
+.cell.mine-adjacent-3 { color: var(--num-3); }
+.cell.mine-adjacent-4 { color: var(--num-4); }
+.cell.mine-adjacent-5 { color: var(--num-5); }
+.cell.mine-adjacent-6 { color: var(--num-6); }
+.cell.mine-adjacent-7 { color: var(--num-7); }
+.cell.mine-adjacent-8 { color: var(--num-8); }
+
+@keyframes explode {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); background: #fca5a5; }
+    100% { transform: scale(1); }
+}
+
+/* ====================================
+   INSTRUCCIONES
+   ==================================== */
+
+.game-instructions {
+    background: var(--light-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 0.5rem;
+    padding: 1.5rem;
+    max-width: 400px;
+}
+
+.game-instructions h3 {
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+    font-size: 1.25rem;
+}
+
+.game-instructions ul {
+    list-style: none;
+}
+
+.game-instructions li {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.game-instructions li:last-child {
+    border-bottom: none;
+}
+
+/* ====================================
+   PANEL DE JUGADORES
+   ==================================== */
+
+.players-panel h3 {
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+    font-size: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+#players-list {
+    list-style: none;
+}
+
+.player-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem;
+    margin: 0.5rem 0;
+    background: var(--light-bg);
+    border-radius: 0.5rem;
+    border: 1px solid var(--border-color);
+    transition: all 0.2s ease;
+}
+
+.player-item:hover {
+    background: var(--primary-color);
+    color: white;
+    transform: translateX(5px);
+}
+
+.player-name {
+    font-weight: 600;
+}
+
+.player-score {
+    background: var(--success-color);
+    color: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+/* ====================================
+   STATUS PANEL
+   ==================================== */
+
+.game-status-panel {
+    margin-top: 2rem;
+}
+
+.status-display {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    padding: 1.5rem;
+    border-radius: 0.75rem;
+    text-align: center;
+    animation: pulse 2s infinite;
+}
+
+.status-icon {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.status-text {
+    font-weight: 600;
+    font-size: 1.125rem;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.8; }
+}
+
+/* ====================================
+   CHAT
+   ==================================== */
+
+.chat-panel {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.chat-panel h3 {
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+    font-size: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.chat-messages {
+    flex: 1;
+    background: var(--light-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 0.5rem;
+    padding: 1rem;
+    max-height: 400px;
+    overflow-y: auto;
+    margin-bottom: 1rem;
+}
+
+.chat-message {
+    margin-bottom: 0.75rem;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    background: white;
+    border: 1px solid var(--border-color);
+}
+
+.chat-message.system-message {
+    background: var(--warning-color);
+    color: white;
+    font-style: italic;
+}
+
+.sender {
+    font-weight: 600;
+    color: var(--primary-color);
+    margin-right: 0.5rem;
+}
+
+.chat-input-container {
+    display: flex;
+    gap: 0.5rem;
+}
+
+#chat-input {
+    flex: 1;
+    padding: 0.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+}
+
+#send-chat-btn {
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+#send-chat-btn:hover {
+    background: var(--primary-color);
+    filter: brightness(1.1);
+}
+
+/* ====================================
+   BOTONES
+   ==================================== */
+
+.btn {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.btn-primary {
+    background: var(--primary-color);
+    color: white;
+}
+
+.btn-primary:hover {
+    background: var(--primary-color);
+    filter: brightness(1.1);
+    transform: translateY(-1px);
+}
+
+.btn-secondary {
+    background: var(--secondary-color);
+    color: white;
+}
+
+.btn-secondary:hover {
+    background: var(--secondary-color);
+    filter: brightness(1.1);
+}
+
+.btn-danger {
+    background: var(--danger-color);
+    color: white;
+}
+
+.btn-danger:hover {
+    background: var(--danger-color);
+    filter: brightness(1.1);
+}
+
+/* ====================================
+   MODALES
+   ==================================== */
+
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.modal.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-content {
+    background: var(--card-bg);
+    border-radius: 0.75rem;
+    box-shadow: var(--shadow-lg);
+    max-width: 600px;
+    max-height: 80vh;
+    overflow-y: auto;
+    transform: scale(0.9);
+    transition: transform 0.3s ease;
+}
+
+.modal.show .modal-content {
+    transform: scale(1);
+}
+
+.modal-header {
+    background: var(--primary-color);
+    color: white;
+    padding: 1.5rem 2rem;
+    border-radius: 0.75rem 0.75rem 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-header h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 0.25rem;
+    transition: background 0.2s ease;
+}
+
+.close-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.modal-body {
+    padding: 2rem;
+}
+
+.modal-body h3 {
+    color: var(--primary-color);
+    margin: 1.5rem 0 1rem 0;
+    font-size: 1.25rem;
+}
+
+.modal-body h3:first-child {
+    margin-top: 0;
+}
+
+.modal-body ul {
+    margin-left: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.modal-body li {
+    margin-bottom: 0.5rem;
+    line-height: 1.6;
+}
+
+.result-actions {
+    margin-top: 2rem;
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+/* ====================================
+   RESPONSIVE
+   ==================================== */
+
+@media (max-width: 1200px) {
+    .game-layout {
+        grid-template-columns: 250px 1fr 250px;
+    }
+    
+    .minesweeper-board {
+        max-width: 500px;
+    }
+}
+
+@media (max-width: 768px) {
+    .game-layout {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .sidebar-left, .sidebar-right {
+        max-height: none;
+        height: auto;
+    }
+    
+    .game-header {
+        padding: 1rem;
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+    }
+    
+    .game-details {
+        justify-content: center;
+    }
+    
+    .minesweeper-board {
+        max-width: 400px;
+        grid-template-columns: repeat(12, 1fr);
+    }
+    
+    .cell {
+        min-height: 28px;
+        min-width: 28px;
+        font-size: 0.875rem;
+    }
+}
+
+/* ====================================
+   ANIMACIONES Y EFECTOS
+   ==================================== */
+
+.fade-in {
+    animation: fadeIn 0.5s ease-out;
+}
+
+.slide-in {
+    animation: slideIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideIn {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+/* ====================================
+   EFECTOS DE JUEGO
+   ==================================== */
+
+.cell-reveal {
+    animation: cellReveal 0.2s ease-out;
+}
+
+.cell-flag {
+    animation: cellFlag 0.3s ease-out;
+}
+
+@keyframes cellReveal {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+@keyframes cellFlag {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}

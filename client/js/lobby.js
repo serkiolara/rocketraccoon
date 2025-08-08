@@ -38,9 +38,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const result = await response.json();
         if (result.status === 'success') {
-            // Guardar código de partida y redirigir
+            // Guardar código de partida y redirigir al buscaminas
             sessionStorage.setItem('currentGame', result.game_code);
-            window.location.href = `game.html?code=${result.game_code}`;
+            window.location.href = `minesweeper.html?code=${result.game_code}`;
         } else {
             showMessage(result.message, "error");
         }
@@ -100,7 +100,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const result = await response.json();
         if (result.status === 'success') {
             sessionStorage.setItem('currentGame', code);
-            window.location.href = `game.html?code=${code}`;
+            window.location.href = `minesweeper.html?code=${code}`;
         } else {
             showMessage(result.message, "error");
         }

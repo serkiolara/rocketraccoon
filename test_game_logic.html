@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test - Lógica del Juego</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; background: #222; color: white; }
+        .test-section { margin: 20px 0; padding: 15px; border: 1px solid #555; border-radius: 8px; }
+        .success { color: #4CAF50; }
+        .error { color: #f44336; }
+        button { padding: 10px 20px; margin: 5px; background: #2196F3; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        #results { margin-top: 20px; padding: 15px; background: #333; border-radius: 8px; }
+    </style>
+</head>
+<body>
+    <h1>🎲 Test de Lógica del Juego</h1>
+    
+    <div class="test-section">
+        <h2>Pruebas Automáticas</h2>
+        <button onclick="runAllTests()">🧪 Ejecutar Todas las Pruebas</button>
+        <button onclick="testBetValidation()">🎯 Test Validación Apuestas</button>
+        <button onclick="testTurnSystem()">🔄 Test Sistema de Turnos</button>
+        <button onclick="testChallengeLogic()">⚔️ Test Lógica Desafíos</button>
+    </div>
+    
+    <div id="results"></div>
+
+    <script>
+        // Estado de prueba
+        let testGameState = {
+            players: {
+                'player1': { dice: [1, 2, 3, 4, 5], diceCount: 5, isHost: true },
+                'player2': { dice: [2, 3, 4, 5, 6], diceCount: 5, isHost: false }
+            },
+            turnOrder: ['player1', 'player2'],
+            turnIndex: 0,
+            currentPlayer: 'player1',
+            currentBet: null,
+            phase: 'betting',
+            round: 1
+        };
+
+        function log(message, type = 'info') {
+            const results = document.getElementById('results');
+            const color = type === 'success' ? '#4CAF50' : type === 'error' ? '#f44336' : '#FFD700';
+            results.innerHTML += `<div style="color: ${color}; margin: 5px 0;">${message}</div>`;
+        }
+
+        function testBetValidation() {
+            log('=== TEST: Validación de Apuestas ===', 'info');
+            
+            // Test 1: Primera apuesta
+            testGameState.currentBet = null;
+            let valid = isValidBet(3, 4);
+            log(`✅ Primera apuesta (3x4): ${valid ? 'VÁLIDA' : 'INVÁLIDA'}`, valid ? 'success' : 'error');
+            
+            // Test 2: Apuesta mayor en cantidad
+            testGameState.currentBet = { quantity: 3, value: 4 };
+            valid = isValidBet(4, 2);
+            log(`✅ Apuesta mayor cantidad (4x2 > 3x4): ${valid ? 'VÁLIDA' : 'INVÁLIDA'}`, valid ? 'success' : 'error');
+            
+            // Test 3: Apuesta mayor en valor
+            valid = isValidBet(3, 5);
+            log(`✅ Apuesta mayor valor (3x5 > 3x4): ${valid ? 'VÁLIDA' : 'INVÁLIDA'}`, valid ? 'success' : 'error');
+            
+            // Test 4: Apuesta inválida
+            valid = isValidBet(2, 6);
+            log(`❌ Apuesta inválida (2x6 < 3x4): ${valid ? 'VÁLIDA' : 'INVÁLIDA'}`, !valid ? 'success' : 'error');
+        }
+
+        function testTurnSystem() {
+            log('=== TEST: Sistema de Turnos ===', 'info');
+            
+            // Test avance de turno
+            let initialIndex = testGameState.turnIndex;
+            let initialPlayer = testGameState.currentPlayer;
+            
+            // Simular nextTurn
+            testGameState.turnIndex = (testGameState.turnIndex + 1) % testGameState.turnOrder.length;
+            testGameState.currentPlayer = testGameState.turnOrder[testGameState.turnIndex];
+            
+            log(`➡️ Turno inicial: ${initialPlayer} (índice ${initialIndex})`, 'info');
+            log(`➡️ Nuevo turno: ${testGameState.currentPlayer} (índice ${testGameState.turnIndex})`, 'success');
+            log(`✅ Cambio de turno: ${initialPlayer !== testGameState.currentPlayer ? 'CORRECTO' : 'ERROR'}`, 
+                initialPlayer !== testGameState.currentPlayer ? 'success' : 'error');
+        }
+
+        function testChallengeLogic() {
+            log('=== TEST: Lógica de Desafíos ===', 'info');
+            
+            // Configurar estado para desafío
+            testGameState.currentBet = { quantity: 3, value: 4 };
+            testGameState.currentPlayer = 'player1';
+            testGameState.challenger = 'player2';
+            
+            // Simular revelación de dados
+            let totalCount = 0;
+            let allDice = [];
+            
+            Object.keys(testGameState.players).forEach(username => {
+                const player = testGameState.players[username];
+                player.dice.forEach(die => {
+                    allDice.push({player: username, value: die});
+                    if (die === testGameState.currentBet.value || die === 1) {
+                        totalCount++;
+                    }
+                });
+            });
+            
+            log(`🎲 Dados totales: ${allDice.map(d => d.value).join(', ')}`, 'info');
+            log(`🎯 Apuesta: ${testGameState.currentBet.quantity}x dados con valor ${testGameState.currentBet.value}`, 'info');
+            log(`📊 Encontrados: ${totalCount} (incluyendo 1s como comodines)`, 'info');
+            
+            // Determinar ganador
+            let winner, loser;
+            if (totalCount >= testGameState.currentBet.quantity) {
+                winner = testGameState.currentPlayer; // Apostador gana
+                loser = testGameState.challenger; // Challenger pierde
+                log(`🏆 Resultado: Apuesta CORRECTA - ${winner} gana, ${loser} pierde`, 'success');
+            } else {
+                winner = testGameState.challenger; // Challenger gana
+                loser = testGameState.currentPlayer; // Apostador pierde
+                log(`💀 Resultado: Apuesta INCORRECTA - ${winner} gana, ${loser} pierde`, 'success');
+            }
+        }
+
+        function runAllTests() {
+            document.getElementById('results').innerHTML = '';
+            log('🧪 INICIANDO SUITE DE PRUEBAS COMPLETAS', 'info');
+            log('', 'info');
+            
+            testBetValidation();
+            log('', 'info');
+            
+            testTurnSystem();
+            log('', 'info');
+            
+            testChallengeLogic();
+            log('', 'info');
+            
+            log('✅ TODAS LAS PRUEBAS COMPLETADAS', 'success');
+        }
+
+        // Funciones auxiliares (copiadas del juego principal)
+        function isValidBet(quantity, value) {
+            if (!testGameState.currentBet) {
+                return quantity >= 1 && value >= 2 && value <= 6;
+            }
+            
+            const currentQuantity = testGameState.currentBet.quantity;
+            const currentValue = testGameState.currentBet.value;
+            
+            if (quantity > currentQuantity) {
+                return value >= 2 && value <= 6;
+            } else if (quantity === currentQuantity) {
+                return value > currentValue;
+            }
+            
+            return false;
+        }
+
+        // Auto-ejecutar pruebas al cargar
+        window.onload = function() {
+            log('🎮 Página de pruebas cargada', 'success');
+            log('Presiona los botones para ejecutar pruebas específicas', 'info');
+        };
+    </script>
+</body>
+</html>

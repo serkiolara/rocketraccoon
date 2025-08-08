@@ -31,13 +31,16 @@
 #### Apuestas:
 - El jugador con el turno puede apostar
 - Las apuestas deben ser crecientes (mayor cantidad o mayor valor)
+- Los jugadores pueden pasar su turno (solo si ya hay una apuesta)
 - Los botones se habilitan/deshabilitan correctamente
+- Se reproducen sonidos al realizar acciones
 
 #### Desafío:
 - El jugador que NO tiene el turno puede presionar "¡Mentiroso!"
+- Se muestra una pantalla modal con los resultados detallados
 - Se revelan todos los dados
 - Se determina quién pierde un dado
-- Se inicia una nueva ronda
+- Se inicia una nueva ronda con animaciones
 
 #### Fin del Juego:
 - Cuando un jugador pierde todos sus dados, es eliminado
@@ -53,6 +56,12 @@
 ✅ Lógica de desafío
 ✅ Eliminación de jugadores
 ✅ Declaración de ganador
+✅ Acción "Pasar" turno
+✅ Animaciones de dados
+✅ Efectos de sonido
+✅ Pantalla modal de resultados
+✅ Manejo de desconexiones
+✅ Persistencia del estado en servidor
 
 ### 5. Posibles Problemas y Soluciones
 
@@ -62,17 +71,55 @@
 **Problema**: Los dados no se muestran
 - **Solución**: Verifica que la función `displayMyDice()` se esté llamando
 
+**Problema**: No se reproducen sonidos
+- **Solución**: Verifica que el navegador permita Web Audio API (requiere interacción del usuario)
+
 **Problema**: Los jugadores no se sincronizan
 - **Solución**: Verifica la conexión P2P y que `broadcastGameState()` funcione
 
 **Problema**: Error en la base de datos
 - **Solución**: Ejecuta el script SQL para agregar la columna `game_state`
 
+**Problema**: Los botones no se habilitan/deshabilitan correctamente
+- **Solución**: Verifica que `updateGameUI()` se llame después de cada cambio de estado
+
 ### 6. Características del Juego
 
 - **Dados Comodín**: Los dados con valor 1 cuentan como cualquier valor
 - **Turnos**: Los jugadores apuestan en orden
 - **Apuestas Crecientes**: Cada apuesta debe ser mayor que la anterior
+- **Pasar Turno**: Los jugadores pueden pasar si ya hay una apuesta previa
 - **Desafíos**: Solo se puede desafiar cuando NO es tu turno
 - **Eliminación**: Perder todos los dados elimina al jugador
 - **Victoria**: El último jugador restante gana
+- **Animaciones**: Dados con efectos visuales suaves
+- **Sonidos**: Efectos de audio para cada acción
+- **Resultados**: Modal detallado después de cada desafío
+- **Desconexiones**: Manejo automático de jugadores que abandonan
+
+### 7. Nuevas Funcionalidades del Paso 8
+
+#### 🎮 Acción "Pasar"
+- Botón naranja "Pasar" disponible cuando es tu turno
+- Solo se puede pasar si ya hay una apuesta previa
+- Útil para estrategias conservadoras
+
+#### 🎬 Animaciones
+- Dados aparecen con efecto de escala suave
+- Transiciones fluidas al perder dados
+- Destacado visual del jugador actual
+
+#### 🔊 Efectos de Sonido
+- Sonido distintivo para cada acción (apostar, pasar, desafiar)
+- Generados con Web Audio API
+- Se activan automáticamente durante el juego
+
+#### 📋 Pantalla de Resultados
+- Modal detallado después de cada desafío
+- Muestra dados encontrados vs apostados
+- Identifica claramente ganador y perdedor
+
+#### 🔌 Manejo de Desconexiones
+- Detecta cuando jugadores abandonan la partida
+- Actualiza automáticamente la lista de jugadores
+- Continúa el juego con los jugadores restantes

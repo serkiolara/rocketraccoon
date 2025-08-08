@@ -1,138 +1,396 @@
+/* ====================================
+   🔍 BUSCAMINAS COLABORATIVO - AUTH
+   ==================================== */
+
+/* Variables CSS - Consistentes con el juego */
 :root {
-  --primary: #ff6b6b;
-  --primary-hover: #ff5252;
-  --bg-panel: rgba(0, 0, 0, 0.65);
-  --input-bg: rgba(255, 255, 255, 0.9);
-  --text-color: #ffffff;
+    --primary-color: #ff6b6b;
+    --secondary-color: #ffa726;
+    --success-color: #4ecdc4;
+    --danger-color: #ef4444;
+    --warning-color: #ffeb3b;
+    --dark-bg: #2c3e50;
+    --light-bg: #f8fafc;
+    --card-bg: #ffffff;
+    --text-primary: #0f172a;
+    --text-secondary: #64748b;
+    --border-color: #e2e8f0;
+    --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+/* Reset y base */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
 body {
-  margin: 0;
-  height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
-  color: var(--text-color);
+    font-family: 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: linear-gradient(135deg, #ff9a56 0%, #ff6b6b 25%, #4ecdc4 50%, #45b7d1 75%, #f093fb 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-primary);
+    overflow: hidden;
 }
+
+/* ====================================
+   CONTENEDOR DE AUTENTICACIÓN
+   ==================================== */
 
 .auth-container {
-  background: var(--bg-panel);
-  padding: 2rem;
-  border-radius: 1rem;
-  /* Ajustamos ancho para dos formularios */
-  width: 800px;
-  max-width: 95%;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
-  text-align: center;
-  backdrop-filter: blur(8px);
+    background: var(--card-bg);
+    border-radius: 1.5rem;
+    box-shadow: var(--shadow-lg);
+    width: 100%;
+    max-width: 900px;
+    margin: 2rem;
+    overflow: hidden;
+    position: relative;
 }
+
+.auth-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 6px;
+    background: linear-gradient(90deg, var(--primary-color), var(--success-color), var(--warning-color));
+}
+
+/* ====================================
+   HEADER
+   ==================================== */
 
 .logo {
-  font-size: 2.8rem;
-  margin-bottom: 1.5rem;
-  text-shadow: 0 2px 6px rgba(0,0,0,0.7);
+    text-align: center;
+    padding: 2rem 2rem 1rem;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 0;
 }
+
+.logo i {
+    color: var(--danger-color);
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+.subtitle {
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+    padding: 0 2rem;
+}
+
+/* ====================================
+   FORMULARIOS
+   ==================================== */
 
 .forms-wrapper {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1.5rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
 }
 
-/* Formulario común */
 .auth-form {
-  background: rgba(255,255,255,0.05);
-  padding: 1.5rem;
-  border-radius: .75rem;
-  box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
-  transition: transform .3s ease;
-  width: 100%;
-  box-sizing: border-box;
+    padding: 2rem;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.auth-form:first-child {
+    border-right: 1px solid var(--border-color);
 }
 
 .auth-form:hover {
-  transform: translateY(-5px);
+    background: var(--light-bg);
+    transform: translateY(-2px);
 }
 
 .auth-form h2 {
-  margin-bottom: 1rem;
-  font-size: 1.5rem;
-  border-bottom: 2px solid var(--primary);
-  display: inline-block;
-  padding-bottom: .25rem;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-align: center;
+    justify-content: center;
 }
 
+.auth-form h2 i {
+    color: var(--primary-color);
+}
+
+/* ====================================
+   GRUPOS DE INPUT
+   ==================================== */
+
 .input-group {
-  margin-bottom: 1rem;
-  text-align: left;
+    margin-bottom: 1.5rem;
 }
 
 .input-group label {
-  display: block;
-  margin-bottom: .25rem;
-  font-size: .9rem;
-  opacity: .9;
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    font-size: 0.875rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.input-group label i {
+    color: var(--text-secondary);
+    width: 16px;
+    text-align: center;
 }
 
 .input-group input {
-  width: 90%;
-  padding: .75rem 1rem;
-  border: none;
-  border-radius: .5rem;
-  background: var(--input-bg);
-  font-size: 1rem;
-  transition: box-shadow .2s ease;
+    width: 100%;
+    padding: 1rem 1.25rem;
+    border: 2px solid var(--border-color);
+    border-radius: 0.75rem;
+    font-size: 1rem;
+    font-family: inherit;
+    background: var(--light-bg);
+    color: var(--text-primary);
+    transition: all 0.2s ease;
 }
 
 .input-group input:focus {
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(255, 107, 107, .4);
+    outline: none;
+    border-color: var(--primary-color);
+    background: var(--card-bg);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    transform: translateY(-1px);
 }
+
+.input-group input::placeholder {
+    color: var(--text-secondary);
+}
+
+/* ====================================
+   BOTONES
+   ==================================== */
 
 .btn {
-  width: 100%;
-  padding: .75rem;
-  margin-top: .5rem;
-  font-size: 1.05rem;
-  font-weight: bold;
-  color: var(--text-color);
-  background: var(--primary);
-  border: none;
-  border-radius: .5rem;
-  cursor: pointer;
-  transition: background .3s;
+    width: 100%;
+    padding: 1rem 1.5rem;
+    border: none;
+    border-radius: 0.75rem;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-family: inherit;
+    margin-top: 0.5rem;
+    box-shadow: var(--shadow);
 }
 
-.btn:hover {
-  background: var(--primary-hover);
+.btn-primary {
+    background: var(--primary-color);
+    color: white;
 }
+
+.btn-primary:hover {
+    background: var(--primary-color);
+    filter: brightness(1.1);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+.btn-success {
+    background: var(--success-color);
+    color: white;
+}
+
+.btn-success:hover {
+    background: var(--success-color);
+    filter: brightness(1.1);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+/* ====================================
+   MENSAJES
+   ==================================== */
 
 .message {
-  margin-top: 1.5rem;
-  padding: .75rem 1rem;
-  border-radius: .5rem;
-  font-weight: bold;
-  opacity: 0.95;
+    margin: 0 2rem 2rem;
+    padding: 1rem 1.5rem;
+    border-radius: 0.75rem;
+    font-weight: 500;
+    text-align: center;
+    animation: slideIn 0.3s ease-out;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
 }
 
-/* Mensajes de error/éxito */
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 .message.error {
-  background: #ff6b6b;
+    background: #fef2f2;
+    color: var(--danger-color);
+    border: 1px solid #fecaca;
+}
+
+.message.error::before {
+    content: '⚠️';
 }
 
 .message.success {
-  background: #4CAF50;
+    background: #f0fdf4;
+    color: var(--success-color);
+    border: 1px solid #bbf7d0;
 }
 
-/* Responsive: vertical en pantallas pequeñas */
-@media (max-width: 800px) {
-  .auth-container {
-    width: 90%;
-    padding: 1.5rem;
-  }
-  .forms-wrapper {
-    grid-template-columns: 1fr;
-  }
+.message.success::before {
+    content: '✅';
+}
+
+.message.info {
+    background: #f0f9ff;
+    color: var(--primary-color);
+    border: 1px solid #bfdbfe;
+}
+
+.message.info::before {
+    content: 'ℹ️';
+}
+
+/* ====================================
+   EFECTOS DE FOCO EN FORMULARIOS
+   ==================================== */
+
+.auth-form:focus-within {
+    background: var(--light-bg);
+}
+
+.auth-form:focus-within h2 {
+    color: var(--primary-color);
+}
+
+/* ====================================
+   RESPONSIVE
+   ==================================== */
+
+@media (max-width: 768px) {
+    .auth-container {
+        margin: 1rem;
+        border-radius: 1rem;
+    }
+    
+    .logo {
+        font-size: 2rem;
+        padding: 1.5rem 1.5rem 1rem;
+    }
+    
+    .subtitle {
+        font-size: 1rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .forms-wrapper {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+    
+    .auth-form {
+        padding: 1.5rem;
+    }
+    
+    .auth-form:first-child {
+        border-right: none;
+        border-bottom: 1px solid var(--border-color);
+    }
+    
+    .message {
+        margin: 0 1.5rem 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .auth-container {
+        margin: 0.5rem;
+    }
+    
+    .logo {
+        font-size: 1.75rem;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .auth-form {
+        padding: 1.25rem;
+    }
+    
+    .input-group {
+        margin-bottom: 1.25rem;
+    }
+    
+    .btn {
+        padding: 0.875rem 1.25rem;
+    }
+}
+
+/* ====================================
+   ANIMACIONES DE CARGA
+   ==================================== */
+
+.loading {
+    position: relative;
+    pointer-events: none;
+    opacity: 0.7;
+}
+
+.loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    margin: -10px 0 0 -10px;
+    border: 2px solid transparent;
+    border-top: 2px solid currentColor;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }

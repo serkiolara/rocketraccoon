@@ -14,6 +14,8 @@
             <div class="player-info">
                 <span id="player-name">Usuario</span>
                 <span id="dice-count">🎲: 5</span>
+                <button id="help-btn" class="help-button">❓ Ayuda</button>
+                <button id="debug-btn" class="help-button" style="background: #FF9800; margin-left: 10px;">🔧 Debug</button>
             </div>
         </header>
 
@@ -33,17 +35,25 @@
             <!-- Área de Juego -->
             <div class="game-area">
                 <div class="game-state">
-                    <div id="current-turn">Turno de: <span id="current-player">Jugador1</span></div>
+                    <div id="current-player">Esperando inicio...</div>
                     <div id="current-bet">Apuesta actual: <span id="bet-value">Ninguna</span></div>
+                    <div id="turn-indicator" class="turn-info-panel">
+                        <!-- Información detallada del turno -->
+                    </div>
                 </div>
 
                 <div class="dice-container" id="player-dice">
-                    <!-- Dados del jugador -->
+                    <div class="no-dice">🎲 Esperando dados...</div>
                 </div>
 
-                <div class="game-controls">
-                    <div class="bet-controls">
-                        <select id="dice-value">
+                <div class="game-controls" id="game-controls">
+                    <!-- Los controles se crean dinámicamente desde JavaScript -->
+                    <button id="start-game-btn" style="display: none; background: #00E676; color: #1a1a1a; padding: 15px 30px; font-size: 18px; font-weight: bold; border-radius: 10px; border: none; cursor: pointer; margin: 10px;">🎮 INICIAR JUEGO</button>
+                    <button id="call-liar-btn" style="display: none;">¡Mentiroso!</button>
+                    <button id="roll-dice" style="display: none;">🎲 Lanzar Dados</button>
+                    <div id="betting-controls" style="display: none;">
+                        <input type="number" id="bet-quantity" min="1" max="30" placeholder="Cantidad">
+                        <select id="bet-value">
                             <option value="1">1</option>
                             <option value="2">2</option>
                             <option value="3">3</option>
@@ -51,21 +61,9 @@
                             <option value="5">5</option>
                             <option value="6">6</option>
                         </select>
-                        <select id="dice-quantity">
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                            <option value="6">6</option>
-                            <option value="7">7</option>
-                            <option value="8">8</option>
-                            <option value="9">9</option>
-                            <option value="10">10</option>
-                        </select>
-                        <button id="place-bet-btn">Apostar</button>
+                        <button id="place-bet-btn">📈 Apostar</button>
+                        <button id="pass-turn-btn">🚫 Pasar</button>
                     </div>
-                    <button id="call-liar-btn">¡Mentiroso!</button>
                 </div>
             </div>
         </main>
@@ -76,6 +74,88 @@
             <ul id="players-list">
                 <!-- Jugadores aparecerán aquí -->
             </ul>
+        </div>
+    </div>
+
+    <!-- Modal de Resultados -->
+    <div id="results-modal" class="modal">
+        <div class="modal-content">
+            <h2>Resultado de la Ronda</h2>
+            <div id="results-content"></div>
+            <button id="continue-btn">Continuar</button>
+        </div>
+    </div>
+
+    <!-- Modal de Instrucciones -->
+    <div id="help-modal" class="modal">
+        <div class="modal-content help-modal">
+            <div class="modal-header">
+                <h2>🎲 Cómo Jugar Liar's Dice</h2>
+                <button id="close-help-btn" class="close-btn">✖</button>
+            </div>
+            <div class="help-content">
+                <div class="help-section">
+                    <h3>🎯 Objetivo</h3>
+                    <p>Ser el último jugador que conserve al menos un dado. Para ganar, debes eliminar a todos los demás jugadores.</p>
+                </div>
+                
+                <div class="help-section">
+                    <h3>🚀 Cómo Empezar</h3>
+                    <ul>
+                        <li>Cada jugador comienza con <strong>5 dados</strong></li>
+                        <li>Al inicio de cada ronda, todos tiran sus dados en secreto</li>
+                        <li>Solo tú puedes ver tus propios dados</li>
+                    </ul>
+                </div>
+
+                <div class="help-section">
+                    <h3>🎲 Realizar Apuestas</h3>
+                    <ul>
+                        <li>En tu turno, debes apostar cuántos dados de un valor específico hay en total</li>
+                        <li>Ejemplo: "Hay 3 dados con valor 4" en toda la mesa</li>
+                        <li>Cada apuesta debe ser mayor que la anterior</li>
+                        <li>Los <strong>1s son comodines</strong> y cuentan como cualquier número</li>
+                    </ul>
+                </div>
+
+                <div class="help-section">
+                    <h3>⚡ Opciones en tu Turno</h3>
+                    <ul>
+                        <li><strong>🎯 Apostar:</strong> Hacer una apuesta mayor que la actual</li>
+                        <li><strong>➡️ Pasar:</strong> Saltar tu turno (solo si ya hay una apuesta)</li>
+                        <li><strong>🔥 Desafiar:</strong> Gritar "¡Mentiroso!" si crees que la apuesta es falsa</li>
+                    </ul>
+                </div>
+
+                <div class="help-section">
+                    <h3>⚔️ Desafíos</h3>
+                    <ul>
+                        <li>Si desafías, se revelan todos los dados</li>
+                        <li>Si la apuesta era <strong>correcta o mayor</strong>: tú pierdes un dado</li>
+                        <li>Si la apuesta era <strong>incorrecta</strong>: el apostador pierde un dado</li>
+                        <li>Quien pierde el dado inicia la siguiente ronda</li>
+                    </ul>
+                </div>
+
+                <div class="help-section">
+                    <h3>🏆 Ganar el Juego</h3>
+                    <ul>
+                        <li>Cuando pierdes todos tus dados, quedas eliminado</li>
+                        <li>El último jugador con dados restantes gana</li>
+                        <li>¡Usa la psicología y el engaño para confundir a tus oponentes!</li>
+                    </ul>
+                </div>
+
+                <div class="help-section strategy">
+                    <h3>💡 Consejos Estratégicos</h3>
+                    <ul>
+                        <li>Los 1s cuentan como comodines, úsalos sabiamente</li>
+                        <li>Observa los patrones de apuestas de tus oponentes</li>
+                        <li>No siempre digas la verdad sobre tus dados</li>
+                        <li>Desafía cuando sospeches que alguien está mintiendo</li>
+                    </ul>
+                </div>
+            </div>
         </div>
     </div>
 

@@ -3,36 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Liars Table - Lobby</title>
+    <title>🔍 Buscaminas Colaborativo - Lobby</title>
     <link rel="stylesheet" href="css/lobby.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
     <div class="lobby-container">
         <header>
-            <h1>Liars Table</h1>
+            <h1><i class="fas fa-bomb"></i> Buscaminas Colaborativo</h1>
             <div class="user-info">
+                <i class="fas fa-user"></i>
                 <span id="username-display">Usuario</span>
-                <button id="logout-btn">Salir</button>
+                <button id="logout-btn"><i class="fas fa-door-open"></i> Salir</button>
             </div>
         </header>
 
         <main>
             <div class="lobby-actions">
-                <button id="create-game-btn">Crear Nueva Partida</button>
+                <button id="create-game-btn">
+                    <i class="fas fa-plus"></i>
+                    Crear Nueva Partida
+                </button>
                 <div class="join-game">
-                    <input type="text" id="game-code-input" placeholder="Código de partida" maxlength="6">
-                    <button id="join-game-btn">Unirse</button>
+                    <input type="text" id="game-code-input" placeholder="Ingresa el código" maxlength="6">
+                    <button id="join-game-btn">
+                        <i class="fas fa-rocket"></i>
+                        Unirse
+                    </button>
                 </div>
             </div>
 
             <div class="game-list">
-                <h2>Partidas Disponibles</h2>
+                <h2><i class="fas fa-gamepad"></i> Partidas Disponibles</h2>
                 <div id="games-container">
+                    <!-- Las partidas se cargarán dinámicamente aquí -->
                 </div>
             </div>
         </main>
 
-        <div id="lobby-message" class="message"></div>
+        <div id="lobby-message" class="message" style="display: none;"></div>
     </div>
 
     <script src="js/lobby.js"></script>

@@ -1,6 +1,6 @@
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+    background: linear-gradient(135deg, #ff9a56 0%, #ff6b6b 25%, #4ecdc4 50%, #45b7d1 75%, #f093fb 100%);
     margin: 0;
     color: white;
     height: 100vh;
@@ -38,6 +38,26 @@ header {
     font-size: 1.2em;
 }
 
+.help-button {
+    background: #ffa726;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 1.2em;
+    cursor: pointer;
+    transition: background 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+}
+
+.help-button:hover {
+    background: #1976D2;
+}
+
 #dice-count {
     font-size: 1.4em;
 }
@@ -70,6 +90,18 @@ main {
     padding: 8px 12px;
     border-radius: 8px;
     background: rgba(255, 255, 255, 0.1);
+    animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+    from { 
+        opacity: 0; 
+        transform: translateY(10px); 
+    }
+    to { 
+        opacity: 1; 
+        transform: translateY(0); 
+    }
 }
 
 .chat-message .sender {
@@ -94,7 +126,7 @@ main {
 #send-chat-btn {
     margin-left: 10px;
     padding: 12px 20px;
-    background: #2196F3;
+    background: #ffa726;
     color: white;
     border: none;
     border-radius: 5px;
@@ -117,10 +149,76 @@ main {
     border-radius: 8px;
 }
 
-#current-player, #bet-value {
-    color: #FFD700;
+#current-player {
+    background: linear-gradient(135deg, #ff6b6b, #ffa726);
+    border: 2px solid #4ecdc4;
+    border-radius: 15px;
+    padding: 20px;
+    margin: 15px 0;
+    text-align: center;
+    box-shadow: 0 8px 25px rgba(0, 230, 118, 0.3);
+    animation: turnPulse 2s infinite ease-in-out;
+}
+
+.turn-display {
+    color: white;
+}
+
+.turn-label {
+    font-size: 14px;
+    font-weight: bold;
+    opacity: 0.9;
+    margin-bottom: 8px;
+}
+
+.player-name {
+    font-size: 24px;
+    font-weight: bold;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+    margin: 10px 0;
+}
+
+.turn-status {
+    font-size: 14px;
+    padding: 8px 16px;
+    border-radius: 20px;
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+.my-status {
+    background: #4ecdc4;
+    color: #1a1a1a;
+    animation: myTurnGlow 1.5s infinite alternate;
+}
+
+.waiting-status {
+    background: rgba(255, 255, 255, 0.2);
+    color: #ccc;
+}
+
+.waiting-turn {
+    color: #ffb347;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 15px;
+}
+
+@keyframes turnPulse {
+    0%, 100% { transform: scale(1); box-shadow: 0 8px 25px rgba(0, 230, 118, 0.3); }
+    50% { transform: scale(1.02); box-shadow: 0 10px 30px rgba(0, 230, 118, 0.5); }
+}
+
+@keyframes myTurnGlow {
+    0% { box-shadow: 0 0 5px rgba(0, 230, 118, 0.5); }
+    100% { box-shadow: 0 0 15px rgba(0, 230, 118, 0.8), 0 0 25px rgba(0, 230, 118, 0.4); }
+}
+
+#bet-value {
+    color: #4ecdc4;
     font-weight: bold;
     font-size: 1.2em;
+    text-shadow: 0 0 10px #4ecdc4;
 }
 
 .dice-container {
@@ -129,6 +227,24 @@ main {
     gap: 15px;
     margin: 30px 0;
     min-height: 100px;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 15px;
+    border: 2px solid #4ecdc4;
+}
+
+.no-dice {
+    color: #ffb347;
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+    padding: 30px;
+    animation: waitingPulse 2s infinite ease-in-out;
+}
+
+@keyframes waitingPulse {
+    0%, 100% { opacity: 0.6; }
+    50% { opacity: 1; }
 }
 
 .die {
@@ -171,6 +287,21 @@ select, button {
     cursor: pointer;
 }
 
+#pass-turn-btn {
+    background: #FF9800;
+    color: white;
+    padding: 12px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1em;
+    cursor: pointer;
+}
+
+#pass-turn-btn:disabled {
+    background: #777;
+    cursor: not-allowed;
+}
+
 #call-liar-btn {
     padding: 15px 30px;
     background: #f44336;
@@ -187,6 +318,101 @@ select, button {
     cursor: not-allowed;
 }
 
+/* Mejorar controles de apuesta */
+.bet-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 20px;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.bet-input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.bet-input-group label {
+    font-weight: bold;
+    color: #FFD700;
+    font-size: 1em;
+}
+
+.bet-input-group select {
+    padding: 12px;
+    border-radius: 8px;
+    border: 2px solid #ffa726;
+    background: rgba(255, 255, 255, 0.9);
+    font-size: 1.1em;
+    font-weight: bold;
+    color: #333;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.bet-input-group select:focus {
+    outline: none;
+    border-color: #FFD700;
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+}
+
+.bet-input-group select:disabled {
+    background: rgba(255, 255, 255, 0.3);
+    color: #666;
+    cursor: not-allowed;
+}
+
+.bet-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.bet-action-btn {
+    flex: 1;
+    padding: 12px;
+    font-size: 1.1em;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+}
+
+.bet-action-btn:disabled {
+    background: #666 !important;
+    color: #999 !important;
+    cursor: not-allowed;
+    transform: none !important;
+}
+
+.bet-action-btn:not(:disabled):hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+#place-bet-btn {
+    background: linear-gradient(135deg, #4CAF50, #45a049);
+    color: white;
+}
+
+#pass-turn-btn {
+    background: linear-gradient(135deg, #FF9800, #F57C00);
+    color: white;
+}
+
+/* Animación para botón mentiroso */
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
 .players-panel {
     grid-area: players;
     background: rgba(0, 0, 0, 0.5);
@@ -195,22 +421,83 @@ select, button {
     overflow-y: auto;
 }
 
+.players-panel h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #4ecdc4;
+    border-bottom: 2px solid #4ecdc4;
+    padding-bottom: 10px;
+    text-shadow: 0 0 10px #4ecdc4;
+}
+
 #players-list {
     list-style: none;
     padding: 0;
+    margin: 0;
 }
 
 #players-list li {
-    padding: 12px;
-    margin: 10px 0;
     background: rgba(255, 255, 255, 0.1);
-    border-radius: 5px;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 10px;
     display: flex;
     justify-content: space-between;
+    align-items: center;
+    transition: all 0.3s ease;
+    border-left: 4px solid transparent;
+}
+
+#players-list li:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateX(5px);
+}
+
+#players-list li .player-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+#players-list li .player-name {
+    font-weight: bold;
+    font-size: 1.1em;
+}
+
+#players-list li .host-badge {
+    font-size: 1.2em;
+    animation: glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+    from { text-shadow: 0 0 5px #FFD700; }
+    to { text-shadow: 0 0 15px #FFD700, 0 0 20px #FFD700; }
 }
 
 #players-list li .dice-count {
-    color: #FFD700;
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #4CAF50;
+}
+
+/* Destacar jugador actual */
+#players-list li.current-turn {
+    background: linear-gradient(135deg, #ff6b6b, #ffa726);
+    border-left-color: #4ecdc4;
+    box-shadow: 0 0 15px rgba(78, 205, 196, 0.5);
+    animation: currentTurn 1.5s ease-in-out infinite alternate;
+    border: 2px solid #4ecdc4;
+}
+
+@keyframes currentTurn {
+    from { box-shadow: 0 0 15px rgba(0, 230, 118, 0.5); }
+    to { box-shadow: 0 0 25px rgba(0, 230, 118, 0.8), 0 0 35px rgba(0, 230, 118, 0.3); }
+}
+
+#players-list li.current-turn .player-name {
+    color: #4ecdc4;
+    font-weight: bold;
+    text-shadow: 0 0 10px #4ecdc4;
 }
 
 .system-message {
@@ -235,4 +522,180 @@ select, button {
 
 .bet-controls select:disabled {
     opacity: 0.5;
+}
+
+/* Destacar jugador actual */
+#players-list li.current-turn {
+    border: 2px solid #FFD700;
+    background: rgba(255, 215, 0, 0.1);
+}
+
+/* Modal de resultados */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background: linear-gradient(135deg, #ff6b6b, #ffa726);
+    padding: 30px;
+    border-radius: 15px;
+    text-align: center;
+    width: 90%;
+    max-width: 600px;
+    border: 2px solid #FFD700;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+    color: white;
+}
+
+.challenge-summary h3 {
+    color: #FFD700;
+    margin-bottom: 20px;
+    text-shadow: 0 0 10px #FFD700;
+}
+
+.dice-reveal {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 15px;
+    margin: 15px 0;
+}
+
+.player-dice-reveal {
+    margin: 10px 0;
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+    text-align: left;
+}
+
+.die-result {
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    background: white;
+    color: #333;
+    border-radius: 5px;
+    line-height: 30px;
+    text-align: center;
+    margin: 0 3px;
+    font-weight: bold;
+}
+
+.die-result.match {
+    background: #4CAF50;
+    color: white;
+    box-shadow: 0 0 10px #4CAF50;
+}
+
+.result-verdict {
+    margin-top: 20px;
+    padding: 15px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.victory-screen h2 {
+    font-size: 3em;
+    color: #FFD700;
+    text-shadow: 0 0 20px #FFD700;
+    margin-bottom: 20px;
+    animation: glow 2s ease-in-out infinite alternate;
+}
+
+#continue-btn {
+    background: #4CAF50;
+    color: white;
+    padding: 15px 30px;
+    font-size: 1.2em;
+    margin-top: 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#continue-btn:hover {
+    background: #45a049;
+    transform: translateY(-2px);
+}
+
+/* Modal de ayuda */
+.help-modal {
+    max-width: 700px;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #FFD700;
+    padding-bottom: 15px;
+}
+
+.close-btn {
+    background: #f44336;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+    cursor: pointer;
+    font-size: 1.1em;
+}
+
+.help-content {
+    text-align: left;
+}
+
+.help-section {
+    margin-bottom: 25px;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    border-left: 4px solid #FFD700;
+}
+
+.help-section h3 {
+    color: #FFD700;
+    margin-bottom: 10px;
+    font-size: 1.3em;
+}
+
+.help-section ul {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.help-section li {
+    margin-bottom: 8px;
+    padding-left: 20px;
+    position: relative;
+}
+
+.help-section li:before {
+    content: "▶";
+    color: #FFD700;
+    position: absolute;
+    left: 0;
+}
+
+.help-section.strategy {
+    background: rgba(76, 175, 80, 0.1);
+    border-left-color: #4CAF50;
+}
+
+.help-section.strategy h3 {
+    color: #4CAF50;
 }

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔍 Buscaminas Colaborativo - RocketRaccoon</title>
+    <link rel="stylesheet" href="css/minesweeper.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="game-container">
+        <!-- Header del juego -->
+        <header class="game-header">
+            <div class="game-info">
+                <h1><i class="fas fa-bomb"></i> Buscaminas Colaborativo</h1>
+                <div class="game-details">
+                    <span class="player-info">👤 <span id="player-name">Jugador</span></span>
+                    <span class="room-code">🏠 Sala: <span id="game-code">ABCD12</span></span>
+                    <span id="connection-status" class="connection-status">🔄 Conectando...</span>
+                    <div class="game-stats">
+                        <span id="mines-count">💣 40</span>
+                        <span id="flags-count">🚩 0</span>
+                        <span id="timer">⏱️ 0:00</span>
+                    </div>
+                </div>
+            </div>
+            <div class="game-controls-header">
+                <button id="new-game-btn" class="btn btn-primary">🆕 Nueva Partida</button>
+                <button id="help-btn" class="btn btn-secondary">❓ Ayuda</button>
+                <button id="leave-game-btn" class="btn btn-danger">🚪 Salir</button>
+            </div>
+        </header>
+
+        <div class="game-layout">
+            <!-- Panel lateral izquierdo -->
+            <aside class="sidebar-left">
+                <div class="players-panel">
+                    <h3><i class="fas fa-users"></i> Jugadores Conectados</h3>
+                    <ul id="players-list">
+                        <!-- Jugadores se cargan dinámicamente -->
+                    </ul>
+                </div>
+                
+                <div class="game-status-panel">
+                    <div id="current-status" class="status-display">
+                        <div class="status-icon">⏳</div>
+                        <div class="status-text">Esperando jugadores...</div>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Área principal del juego -->
+            <main class="game-main">
+                <div class="board-container">
+                    <div id="minesweeper-board" class="minesweeper-board">
+                        <!-- El tablero se genera dinámicamente -->
+                    </div>
+                    
+                    <div class="game-instructions" id="game-instructions">
+                        <h3>🎯 Instrucciones</h3>
+                        <ul>
+                            <li><strong>Clic izquierdo:</strong> Revelar celda</li>
+                            <li><strong>Clic derecho:</strong> Colocar/quitar bandera</li>
+                            <li><strong>Colaborativo:</strong> ¡Trabajen juntos!</li>
+                            <li><strong>Objetivo:</strong> Encontrar todas las minas sin detonarlas</li>
+                        </ul>
+                    </div>
+                </div>
+            </main>
+
+            <!-- Panel lateral derecho (chat) -->
+            <aside class="sidebar-right">
+                <div class="chat-panel">
+                    <h3><i class="fas fa-comments"></i> Chat del Equipo</h3>
+                    <div class="chat-messages" id="chat-messages">
+                        <!-- Mensajes se cargan dinámicamente -->
+                    </div>
+                    <div class="chat-input-container">
+                        <input type="text" id="chat-input" placeholder="Escribe un mensaje..." maxlength="200">
+                        <button id="send-chat-btn"><i class="fas fa-paper-plane"></i></button>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </div>
+
+    <!-- Modal de ayuda -->
+    <div id="help-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-question-circle"></i> Buscaminas Colaborativo</h2>
+                <button id="close-help-btn" class="close-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <h3>🎯 Objetivo</h3>
+                <p>Trabajar en equipo para revelar todas las celdas sin minas y marcar todas las minas con banderas.</p>
+                
+                <h3>🕹️ Controles</h3>
+                <ul>
+                    <li><strong>Clic izquierdo:</strong> Revelar una celda</li>
+                    <li><strong>Clic derecho:</strong> Colocar o quitar bandera</li>
+                    <li><strong>Números:</strong> Indican cuántas minas hay alrededor</li>
+                </ul>
+                
+                <h3>👥 Colaboración</h3>
+                <ul>
+                    <li>Todos pueden jugar simultáneamente</li>
+                    <li>Comunícate con tu equipo por chat</li>
+                    <li>Si alguien toca una mina, ¡todos pierden!</li>
+                    <li>Si revelan todas las celdas seguras, ¡todos ganan!</li>
+                </ul>
+                
+                <h3>🏆 Puntuación</h3>
+                <ul>
+                    <li><strong>+10 puntos:</strong> Por revelar una celda segura</li>
+                    <li><strong>+20 puntos:</strong> Por marcar correctamente una mina</li>
+                    <li><strong>-5 puntos:</strong> Por marcar incorrectamente</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de resultado del juego -->
+    <div id="game-result-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="result-title">🏆 ¡Victoria!</h2>
+            </div>
+            <div class="modal-body">
+                <div id="result-content">
+                    <!-- Contenido del resultado -->
+                </div>
+                <div class="result-actions">
+                    <button id="play-again-btn" class="btn btn-primary">🔄 Jugar de Nuevo</button>
+                    <button id="back-to-lobby-btn" class="btn btn-secondary">🏠 Volver al Lobby</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/multiplayer_http.js"></script>
+    <script src="js/minesweeper.js"></script>
+</body>
+</html>

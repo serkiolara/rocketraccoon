@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Multiplayer - RocketRaccoon</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            padding: 20px; 
+            background: #f5f5f5;
+        }
+        .container { 
+            max-width: 800px; 
+            margin: 0 auto; 
+            background: white; 
+            padding: 20px; 
+            border-radius: 10px; 
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .status { 
+            padding: 10px; 
+            margin: 10px 0; 
+            border-radius: 5px; 
+            font-weight: bold;
+        }
+        .connected { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+        .info { background: #d1ecf1; color: #0c5460; }
+        input, button { 
+            padding: 10px; 
+            margin: 5px; 
+            border: 1px solid #ddd; 
+            border-radius: 5px;
+        }
+        button { 
+            background: #007bff; 
+            color: white; 
+            cursor: pointer;
+        }
+        button:hover { background: #0056b3; }
+        #messages { 
+            height: 200px; 
+            overflow-y: auto; 
+            border: 1px solid #ddd; 
+            padding: 10px; 
+            margin: 10px 0;
+            background: #f8f9fa;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 Test Sistema Multiplayer HTTP</h1>
+        
+        <div class="test-section">
+            <h3>1. Conexión</h3>
+            <input type="text" id="room-id" placeholder="ID de Sala (ej: 123)" value="123">
+            <input type="text" id="username" placeholder="Nombre de Usuario" value="TestUser">
+            <button onclick="connectToRoom()">🔌 Conectar</button>
+            <button onclick="disconnect()">🔌 Desconectar</button>
+            <div id="connection-status" class="status info">🔄 Desconectado</div>
+        </div>
+        
+        <div class="test-section">
+            <h3>2. Chat</h3>
+            <input type="text" id="message" placeholder="Escribe un mensaje..." onkeypress="handleEnter(event)">
+            <button onclick="sendMessage()">📤 Enviar Mensaje</button>
+        </div>
+        
+        <div class="test-section">
+            <h3>3. Acciones de Juego</h3>
+            <button onclick="sendGameAction()">🎮 Enviar Acción de Juego</button>
+            <button onclick="sendNewGameAction()">🆕 Nueva Partida</button>
+        </div>
+        
+        <div class="test-section">
+            <h3>4. Usuarios Conectados</h3>
+            <div id="users-list">No hay usuarios conectados</div>
+        </div>
+        
+        <div class="test-section">
+            <h3>5. Log de Mensajes</h3>
+            <div id="messages"></div>
+            <button onclick="clearMessages()">🗑️ Limpiar Log</button>
+        </div>
+    </div>
+
+    <script src="js/multiplayer_http.js"></script>
+    <script>
+        let client = null;
+        
+        function log(message, type = 'info') {
+            const messages = document.getElementById('messages');
+            const div = document.createElement('div');
+            div.style.color = type === 'error' ? 'red' : type === 'success' ? 'green' : 'black';
+            div.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            messages.appendChild(div);
+            messages.scrollTop = messages.scrollHeight;
+        }
+        
+        function connectToRoom() {
+            const roomId = document.getElementById('room-id').value;
+            const username = document.getElementById('username').value;
+            
+            if (!roomId || !username) {
+                log('Por favor ingresa ID de sala y nombre de usuario', 'error');
+                return;
+            }
+            
+            log(`Conectando como ${username} a sala ${roomId}...`, 'info');
+            
+            client = new MultiplayerClient(roomId, username);
+            
+            client.onMessage = (username, message, timestamp) => {
+                log(`💬 ${username}: ${message}`, 'success');
+            };
+            
+            client.onGameAction = (username, actionType, actionData) => {
+                log(`🎮 ${username} realizó acción: ${actionType} - ${JSON.stringify(actionData)}`, 'info');
+            };
+            
+            client.onUsersUpdate = (users) => {
+                document.getElementById('users-list').textContent = 
+                    users.length > 0 ? users.join(', ') : 'No hay usuarios conectados';
+                log(`👥 Usuarios conectados: ${users.join(', ')}`, 'info');
+            };
+            
+            client.onConnectionStatus = (status, error) => {
+                const statusDiv = document.getElementById('connection-status');
+                switch(status) {
+                    case 'connected':
+                        statusDiv.textContent = '🟢 Conectado';
+                        statusDiv.className = 'status connected';
+                        log('✅ Conectado exitosamente', 'success');
+                        break;
+                    case 'disconnected':
+                        statusDiv.textContent = '🔴 Desconectado';
+                        statusDiv.className = 'status error';
+                        log('🔌 Desconectado', 'info');
+                        break;
+                    case 'error':
+                        statusDiv.textContent = '⚠️ Error: ' + error;
+                        statusDiv.className = 'status error';
+                        log('❌ Error: ' + error, 'error');
+                        break;
+                }
+            };
+            
+            client.connect();
+        }
+        
+        function disconnect() {
+            if (client) {
+                client.disconnect();
+                client = null;
+                log('Desconectado manualmente', 'info');
+            }
+        }
+        
+        function sendMessage() {
+            const message = document.getElementById('message').value.trim();
+            if (!message || !client) {
+                log('Escribe un mensaje y asegúrate de estar conectado', 'error');
+                return;
+            }
+            
+            client.sendMessage(message);
+            log(`📤 Enviado: ${message}`, 'info');
+            document.getElementById('message').value = '';
+        }
+        
+        function sendGameAction() {
+            if (!client) {
+                log('Conéctate primero', 'error');
+                return;
+            }
+            
+            const actionData = {
+                row: Math.floor(Math.random() * 16),
+                col: Math.floor(Math.random() * 16),
+                value: Math.random() > 0.5 ? 'reveal' : 'flag'
+            };
+            
+            client.sendGameAction('test_action', actionData);
+            log(`🎮 Acción de juego enviada: ${JSON.stringify(actionData)}`, 'info');
+        }
+        
+        function sendNewGameAction() {
+            if (!client) {
+                log('Conéctate primero', 'error');
+                return;
+            }
+            
+            const gameState = {
+                status: 'new_game',
+                board: 'test',
+                timestamp: Date.now()
+            };
+            
+            client.sendGameAction('new_game', { gameState });
+            log('🆕 Nueva partida iniciada', 'info');
+        }
+        
+        function handleEnter(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+        
+        function clearMessages() {
+            document.getElementById('messages').innerHTML = '';
+        }
+        
+        // Log inicial
+        log('🚀 Sistema de test cargado. Ingresa los datos y haz clic en Conectar.', 'info');
+    </script>
+</body>
+</html>

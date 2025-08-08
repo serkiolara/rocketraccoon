@@ -3,48 +3,60 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Liars Table - Login</title>
+  <title>🔍 Buscaminas Colaborativo - Login</title>
   <link rel="stylesheet" href="css/auth.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
   <div class="auth-container">
-    <h1 class="logo">Liars Table</h1>
+    <h1 class="logo">
+      <i class="fas fa-bomb"></i>
+      Buscaminas Colaborativo
+    </h1>
+    <p class="subtitle">Descubre las minas trabajando en equipo</p>
 
     <div class="forms-wrapper">
       <!-- Login -->
       <form id="login-form" class="auth-form">
-        <h2>Iniciar Sesión</h2>
+        <h2><i class="fas fa-sign-in-alt"></i> Iniciar Sesión</h2>
         <div class="input-group">
-          <label for="login-username">Usuario</label>
+          <label for="login-username"><i class="fas fa-user"></i> Usuario</label>
           <input type="text" id="login-username" placeholder="Tu usuario" required />
         </div>
         <div class="input-group">
-          <label for="login-password">Contraseña</label>
+          <label for="login-password"><i class="fas fa-lock"></i> Contraseña</label>
           <input type="password" id="login-password" placeholder="Tu contraseña" required />
         </div>
-        <button type="submit" class="btn">Ingresar</button>
+        <button type="submit" class="btn btn-primary">
+          <i class="fas fa-rocket"></i>
+          Ingresar
+        </button>
       </form>
 
       <!-- Registro -->
       <form id="register-form" class="auth-form">
-        <h2>Registrarse</h2>
+        <h2><i class="fas fa-user-plus"></i> Registrarse</h2>
         <div class="input-group">
-          <label for="register-username">Usuario</label>
+          <label for="register-username"><i class="fas fa-user"></i> Usuario</label>
           <input type="text" id="register-username" placeholder="Elige un usuario" required />
         </div>
         <div class="input-group">
-          <label for="register-password">Contraseña</label>
+          <label for="register-password"><i class="fas fa-lock"></i> Contraseña</label>
           <input type="password" id="register-password" placeholder="Elige una contraseña" required />
         </div>
         <div class="input-group">
-          <label for="register-confirm">Confirmar</label>
+          <label for="register-confirm"><i class="fas fa-check"></i> Confirmar</label>
           <input type="password" id="register-confirm" placeholder="Repite tu contraseña" required />
         </div>
-        <button type="submit" class="btn">Crear Cuenta</button>
+        <button type="submit" class="btn btn-success">
+          <i class="fas fa-plus"></i>
+          Crear Cuenta
+        </button>
       </form>
     </div>
 
-    <div id="auth-message" class="message"></div>
+    <div id="auth-message" class="message" style="display: none;"></div>
   </div>
 
   <script src="js/auth.js"></script>
